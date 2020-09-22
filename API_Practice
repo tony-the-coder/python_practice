@@ -26,5 +26,6 @@ def myFirstApi(word, amount):
         print("We have a problem. The server returned a status of", code)
 
 
-
-print(myFirstApi('Garfield', 5))
+req_word = input("Please enter a word to find a rhyming word. ")
+req_len = input("Max number of results you want. ")
+print(myFirstApi(req_word, req_len))
