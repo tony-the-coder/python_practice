@@ -1,0 +1,30 @@
+import requests
+import json
+
+
+def myFirstApi(word, amount):
+
+    baseurl = 'https://api.datamuse.com/words'
+    params_diction = {}
+    print(params_diction)
+    params_diction['rel_rhy'] = word
+    print(params_diction)
+    params_diction['max'] = amount
+    print(params_diction)
+    resp = requests.get(baseurl, params= params_diction)
+    print("This is the URL", resp.url)
+    print("This is testing resp", resp)
+    print('_________________________________---------------_________________________________')
+    print("That made me woozy")
+    code = resp.status_code
+    if code == 200:
+        print("It is alive")
+        word_ds = resp.json()
+        print("Here we have word_ds", word_ds)
+        return [d['word'] for d in word_ds]
+    else:
+        print("We have a problem. The server returned a status of", code)
+
+
+
+print(myFirstApi('Garfield', 5))
