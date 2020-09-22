@@ -1,0 +1,13 @@
+import requests
+import json
+
+
+def get_google(site, lookingfor):
+    params_dict = {}
+    baseurl = site
+    params_dict['q'] = lookingfor
+    params_dict['tbm'] = 'isch'
+    search = requests.get(baseurl, params=params_dict)
+    return search.url
+search_for = input("What do you want to search google for? ")
+print(get_google('http://google.com/search', search_for))
