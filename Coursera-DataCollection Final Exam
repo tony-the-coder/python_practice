@@ -1,0 +1,71 @@
+import requests
+import requests_with_caching #This is from Coursera and only works in their environment. With this, no API key is needed.
+
+# some invocations that we use in the automated tests; uncomment these if you are getting errors and want better error messages
+# get_movies_from_tastedive("Bridesmaids")
+# get_movies_from_tastedive("Black Panther")
+
+def get_movies_from_tastedive(movieName):
+    """If this function is to work outside of the Runestone environment, the request_with_caching needs to be removed and
+    one needs to sign up for an API Key."""
+    baseurl = "https://tastedive.com/api/similar"
+    params_dict = {}
+    params_dict['q'] = movieName
+    params_dict['type'] = 'movies'
+    params_dict['limit'] = 5
+    search = requests_with_caching.get(baseurl, params=params_dict)
+    print(search.url)
+    my_json_maybe = search.json()
+    return my_json_maybe
+
+def extract_movie_titles(hopefully):
+    #test = get_movies_from_tastedive(movieName)
+    #print(type(test))
+    movie_list = []
+    #for x in hopefully['Similar']['Results']:
+     #   print(x['Name'])
+      #  searching_list = x['Name']
+        #print(searching_list)
+       # movie_list.append(searching_list)
+    #print("Here is the start of a list", movie_list)
+    #return movie_list
+    working_search = [x['Name'] for x in hopefully['Similar']['Results']]
+    print(working_search)
+    return working_search
+
+def get_related_titles(titles):
+    """Getting related movies. This took a long time to figure out how it worked. I could not get the zip function to
+    work in this. I found extend and set after an extensive Google Search.
+    https://www.geeksforgeeks.org/extending-list-python-5-different-ways/#:~:text=Extending%20a%20list%20in%20Python%20%285%20different%20ways%29,added%20to%20a%20list.%20...%20More%20items...%20"""
+    movie_list = []
+    for movie in titles:
+        #zip(movie_list(extract_movie_titles(get_movies_from_tastedive(movie))))
+    #x=zip(movie_list)
+        #print(movie_list)
+        movie_list.extend(extract_movie_titles(get_movies_from_tastedive(movie)))
+    #return movie_list
+    set_list = list(set(movie_list))
+    print(type(set_list))
+    return set_list
+
+def get_movie_rating(movie):
+    ratings = movie['Ratings']
+    #print(ratings)
+    for rating in ratings:
+       # print(rating)
+        if rating["Source"] == 'Rotten Tomatoes':
+            #print(rating)
+            print(rating['Value'][:-1])
+            return int(rating['Value'][:-1])
+    return 0 #Ten minutes to realize that the reason this was not working was because I had the return statement indented wrong.
+
+
+def get_sorted_recommendations(a_list):
+    final_list = get_related_titles(a_list)
+    final_dict = {}
+    for movie in final_list:
+        ratings = get_movie_rating(get_movie_data(movie))#Here, I actually needed to find help online. I could not figure out how to get this working correctly.
+                                                         #Looks like I need to brush up on calling a function within a function
+        final_dict[movie] = ratings
+    print(final_dict)
+    return [i[0] for i in sorted(final_dict.items(), key=lambda item: (item[1], item[0]), reverse=True)]
