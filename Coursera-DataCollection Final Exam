@@ -1,5 +1,7 @@
 import requests
-import requests_with_caching #This is from Coursera and only works in their environment. With this, no API key is needed.
+import requests_with_caching #This is from Coursera and only works in their environment. With this, no API key is needed. I will need to rewrite this with my own API key 
+#So I do not have to rely on code from the school. I may not be able to do as many requests, but it is worth it. The instructor said we can use the input in our own code
+#but advised against using it in a production environment. 
 
 # some invocations that we use in the automated tests; uncomment these if you are getting errors and want better error messages
 # get_movies_from_tastedive("Bridesmaids")
